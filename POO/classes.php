@@ -84,4 +84,8 @@
         }        
     }
 
+    class Editeur extends Moderateur {
+        private String $moderationLevel ;
+    }
+
 ?>
