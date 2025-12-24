@@ -100,6 +100,19 @@
     class Author extends User {
         private String $bio ;
 
+        public function __construct(int $id, string $username, string $email, string $password, string $bio) {
+            parent::__construct($id, $username, $email, $password);
+            $this->bio = $bio;
+        }
+
+        public function getBio(): string { 
+            return $this->bio; 
+        }
+
+        public function setBio(string $bio): void { 
+            $this->bio = $bio; 
+        }
+
         public function createArticle(string $titre, string $content): Article {
             return new Article();
         }
@@ -120,6 +133,7 @@
     class Admin extends Moderateur {
         private String $isSuperAdmin ;
 
+
         public function createUser(string $username, string $email, string $password): Utilisateur {
             return new Utilisateur();
         }
@@ -139,6 +153,7 @@
 
     class Editeur extends Moderateur {
         private String $moderationLevel ;
+
     }
 
     class Article {
@@ -148,9 +163,10 @@
         private String $excerpt ; 
         private String $status ;
         private User $author ;
-        private String $createdAt ;
-        private ?String $publishedAt ;
-        private String $updatedAt ;
+        private DateTime $createdAt ;
+        private ?DateTime $publishedAt ;
+        private ?DateTime $updatedAt ;
+
 
         public function addCategory(Categorie $category): void {
         }
