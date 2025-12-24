@@ -88,4 +88,27 @@
         private String $moderationLevel ;
     }
 
+    class Article {
+        private int $id_article ;
+        private String $titre ; 
+        private String $content ; 
+        private String $excerpt ; 
+        private String $status ;
+        private String $author ;
+        private String $createdAt ;
+        private String $publishedAt ;
+        private String $updatedAt ;
+
+        public function addCategory(Categorie $category): void {
+        }
+
+        public function removeCategory(Categorie $category): void {
+        }
+
+        public function getComments(): array {
+            return [];
+        }
+    }
+
+
 ?>
