@@ -44,4 +44,25 @@
         }
     }
 
+    class Author extends User {
+        private String $bio ;
+
+        public function createArticle(string $titre, string $content): Article {
+            return new Article();
+        }
+
+        public function updateOwnArticle(int $id_article, array $data): bool {
+            return false;
+        }
+
+        public function deleteOwnArticle(int $id_article): bool {
+            return false;
+        }
+
+        public function getMyArticles(): array {
+            return [];
+        }
+    }
+
+
 ?>
