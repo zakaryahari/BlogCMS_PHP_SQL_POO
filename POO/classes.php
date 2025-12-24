@@ -1,16 +1,68 @@
 <?php
 
+    require_once 'data.php';
+
     class User {
         protected int $id_utilisateur ;
         protected String $username ;
         protected String $email ;
         protected String $password ;
         protected DateTime $createdAt ;
-        protected DateTime $lastLogin ;
-        protected 
-        
+        protected ?DateTime $lastLogin ;
+
+        public function __construct(int $id , String $username , String $email , String $password){
+            $this->id_utilisateur = $id;
+            $this->username = $username;
+            $this->email = $email;
+            $this->password = $password;
+            $this->createdAt = new DateTime();
+            $this->lastLogin = null;
+        }
+
+        public function getid_utilisateur() : int {
+            return $this->id_utilisateur;
+        }
+
+        public function getUsername(): string {
+            return $this->username; 
+        }
+
+        public function getEmail(): string {
+            return $this->email; 
+        }
+
+        public function getPassword(): string {
+            return $this->password; 
+        }
+
+        public function getCreatedAt(): DateTime {
+            return $this->createdAt; 
+        }
+
+        public function getLastLogin(): ?DateTime {
+             return $this->lastLogin; 
+        }
+
+
+
+        public function setUsername(string $username): void {
+             $this->username = $username; 
+        }
+
+        public function setEmail(string $email): void {
+             $this->email = $email; 
+        }
+
+        public function setPassword(string $password): void {
+             $this->password = $password; 
+        }
+
+        public function setLastLogin(DateTime $date): void {
+             $this->lastLogin = $date; 
+        }
+
+
         public function login(string $email, string $password): bool {
-            foreach()
             return false;
         }
 
@@ -19,6 +71,7 @@
     }
 
     class Moderateur extends user {
+
         public function approveComment(int $id_commentaire): bool {
             return false;
         }
@@ -94,9 +147,9 @@
         private String $content ; 
         private String $excerpt ; 
         private String $status ;
-        private String $author ;
+        private User $author ;
         private String $createdAt ;
-        private String $publishedAt ;
+        private ?String $publishedAt ;
         private String $updatedAt ;
 
         public function addCategory(Categorie $category): void {
@@ -114,10 +167,10 @@
         private int $id_categorie ;
         private String $name ;
         private String $description ;
-        private Categorie $parent ;
+        private ?Categorie $parent ;
         private DateTime $createdAt ;
 
-        public function getParent(): Categorie {
+        public function getParent(): ?Categorie {
             return $this->parent;
         }
 
