@@ -110,5 +110,20 @@
         }
     }
 
+    class Categorie {
+        private int $id_categorie ;
+        private String $name ;
+        private String $description ;
+        private Categorie $parent ;
+        private DateTime $createdAt ;
+
+        public function getParent(): Categorie {
+            return $this->parent;
+        }
+
+        public function getTree(): array {
+            return [];
+        }
+    }
 
 ?>
