@@ -186,18 +186,16 @@
         private String $content ; 
         private String $excerpt ; 
         private String $status ;
-        private User $author ;
         private DateTime $createdAt ;
         private ?DateTime $publishedAt ;
         private ?DateTime $updatedAt ;
 
-        public function __construct(int $id, string $titre, string $content, string $excerpt, User $author) {
+        public function __construct(int $id, string $titre, string $content, string $excerpt) {
             $this->id_article = $id;
             $this->titre = $titre;
             $this->content = $content;
             $this->excerpt = substr($content, 0, 150) . "...";
             $this->status = "draft";
-            $this->author = $author;
             $this->createdAt = new DateTime();
         }
         
@@ -221,9 +219,6 @@
             return $this->status; 
         }
 
-        public function getAuthor(): User {
-            return $this->author; 
-        }
 
         public function getCreatedAt(): string {
             return $this->createdAt; 
@@ -266,6 +261,14 @@
         private String $description ;
         private ?Categorie $parent ;
         private DateTime $createdAt ;
+
+        public function __construct(int $id, string $name, string $desc, ?Categorie $parent = null) {
+            $this->id_categorie = $id;
+            $this->name = $name;
+            $this->description = $desc;
+            $this->parent = $parent;
+            $this->createdAt = new DateTime();
+        }
 
         public function getParent(): ?Categorie {
             return $this->parent;
