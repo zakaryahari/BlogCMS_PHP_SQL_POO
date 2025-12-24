@@ -166,6 +166,18 @@
     class Editeur extends Moderateur {
         private String $moderationLevel ;
 
+        public function __construct(int $id, string $username, string $email, string $password, string $moderationLevel) {
+            parent::__construct($id, $username, $email, $password);
+            $this->moderationLevel = $moderationLevel;
+        }
+        
+        public function getModerationLevel(): string { 
+            return $this->moderationLevel; 
+        }
+
+        public function setModerationLevel(string $level): void { 
+            $this->moderationLevel = $level; 
+        }
     }
 
     class Article {
