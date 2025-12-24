@@ -18,4 +18,30 @@
         }
     }
 
+    class Moderateur extends user {
+        public function approveComment(int $id_commentaire): bool {
+            return false;
+        }
+
+        public function deleteComment(int $id_commentaire): bool {
+            return false;
+        }
+
+        public function createCategory(string $name, Categorie $parentCategory = null): Categorie {
+            return new Categorie();
+        }
+
+        public function deleteCategory(int $id_categorie): bool {
+            return false;
+        }
+
+        public function publishArticle(int $id_article): void {
+
+        }
+
+        public function deleteAnyArticle(int $id_article): bool {
+            return false;
+        }
+    }
+
 ?>
