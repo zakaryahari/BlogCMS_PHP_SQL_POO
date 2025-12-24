@@ -133,6 +133,18 @@
     class Admin extends Moderateur {
         private String $isSuperAdmin ;
 
+        public function __construct(int $id, string $username, string $email, string $password, string $isSuperAdmin) {
+            parent::__construct($id, $username, $email, $password);
+            $this->isSuperAdmin = $isSuperAdmin;
+        }        
+
+        public function getIsSuperAdmin(): string { 
+            return $this->isSuperAdmin; 
+        }
+
+        public function setIsSuperAdmin(string $val): void { 
+            $this->isSuperAdmin = $val; 
+        }
 
         public function createUser(string $username, string $email, string $password): Utilisateur {
             return new Utilisateur();
