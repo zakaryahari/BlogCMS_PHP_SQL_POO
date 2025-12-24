@@ -191,6 +191,63 @@
         private ?DateTime $publishedAt ;
         private ?DateTime $updatedAt ;
 
+        public function __construct(int $id, string $titre, string $content, string $excerpt, User $author) {
+            $this->id_article = $id;
+            $this->titre = $titre;
+            $this->content = $content;
+            $this->excerpt = substr($content, 0, 150) . "...";
+            $this->status = "draft";
+            $this->author = $author;
+            $this->createdAt = new DateTime();
+        }
+        
+        public function getId(): int {
+            return $this->id_article; 
+        }
+
+        public function getTitle(): string {
+            return $this->titre; 
+        }
+
+        public function getContent(): string {
+            return $this->content; 
+        }
+
+        public function getExcerpt(): string {
+            return $this->excerpt; 
+        }
+
+        public function getStatus(): string {
+            return $this->status; 
+        }
+
+        public function getAuthor(): User {
+            return $this->author; 
+        }
+
+        public function getCreatedAt(): string {
+            return $this->createdAt; 
+        }
+
+
+
+        public function setTitle(string $titre): void {
+            $this->titre = $titre; 
+        }
+
+        public function setContent(string $content): void {
+            $this->content = $content; 
+        }
+        
+        public function setStatus(string $status): void {
+            $this->status = $status; 
+        }
+
+        public function setPublishedAt(string $date): void { 
+            $this->publishedAt = $date; 
+        }
+
+
 
         public function addCategory(Categorie $category): void {
         }
