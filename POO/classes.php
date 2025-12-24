@@ -126,4 +126,14 @@
         }
     }
 
+    class Commentaire {
+        private ind $id_commentaire;
+        private String $libelle;
+        private String $description;
+        private String $createdAt;
+
+        public function addComment(): void {
+        }
+    }
+
 ?>
