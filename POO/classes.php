@@ -64,5 +64,24 @@
         }
     }
 
+    class Admin extends Moderateur {
+        private String $isSuperAdmin ;
+
+        public function createUser(string $username, string $email, string $password): Utilisateur {
+            return new Utilisateur();
+        }
+
+        public function deleteUser(int $id_utilisateur): bool {
+            return false;
+        }
+
+        public function updateUserRole(int $id_utilisateur, string $role): bool {
+            return false;
+        }
+
+        public function listAllUsers(): array {
+            return [];
+        }        
+    }
 
 ?>
