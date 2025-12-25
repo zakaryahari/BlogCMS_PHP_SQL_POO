@@ -93,9 +93,8 @@
             return false;
         }
 
-        public function createCategory(string $name, Categorie $parentCategory = null): Categorie {
+        public function createCategory(string $name, string $desc , Categorie $parentCategory = null): Categorie {
 
-            return new Categorie();
         }
 
         public function deleteCategory(int $id_categorie): bool {
@@ -285,6 +284,35 @@
             $this->createdAt = new DateTime();
         }
 
+
+        public function getId(): int {
+            return $this->id_categorie;
+        }
+
+        public function getName(): string {
+            return $this->name;
+        }
+
+        public function getDescription(): string {
+            return $this->description;
+        }
+
+        public function getParent(): ?Categorie {
+            return $this->parent;
+        }
+
+        public function getCreatedAt(): DateTime {
+            return $this->createdAt;
+        }
+
+
+        public function setName(string $name): void {
+            $this->name = $name;
+        }
+
+        public function setDescription(string $description): void {
+            $this->description = $description;
+        }
         public function getParent(): ?Categorie {
             return $this->parent;
         }
@@ -292,6 +320,8 @@
         public function getTree(): array {
             return [];
         }
+
+
     }
 
     class Commentaire {
