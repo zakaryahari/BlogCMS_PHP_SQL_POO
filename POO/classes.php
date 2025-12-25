@@ -66,10 +66,20 @@
 
         public function login(string $email, string $password): ?User {
 
+            global $users;
+
+            foreach($users as $u){
+                if ($u->getEmail() == $email && password_verify($password , $u->getPassword())) {
+                    $u->setLastLogin(new DateTime());
+
+                    return $u;
+                }
+            }
+            return NULL;
         }
 
         public function logout(): void {
-            
+            echo "Déconnexion en cours...\n";
         }
     }
 
@@ -84,6 +94,7 @@
         }
 
         public function createCategory(string $name, Categorie $parentCategory = null): Categorie {
+
             return new Categorie();
         }
 
