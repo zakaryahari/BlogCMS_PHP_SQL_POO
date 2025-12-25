@@ -2,6 +2,8 @@
 
     require_once 'data.php';
 
+    $currentUser = null;
+
     class User {
         protected int $id_utilisateur ;
         protected String $username ;
@@ -62,15 +64,16 @@
         }
 
 
-        public function login(string $email, string $password): bool {
-            return false;
+        public function login(string $email, string $password): ?User {
+
         }
 
         public function logout(): void {
+            
         }
     }
 
-    class Moderateur extends user {
+    class Moderateur extends User {
 
         public function approveComment(int $id_commentaire): bool {
             return false;
@@ -99,6 +102,7 @@
 
     class Author extends User {
         private String $bio ;
+        private array $articles = [];
 
         public function __construct(int $id, string $username, string $email, string $password, string $bio) {
             parent::__construct($id, $username, $email, $password);
@@ -220,7 +224,7 @@
         }
 
 
-        public function getCreatedAt(): string {
+        public function getCreatedAt(): DateTime {
             return $this->createdAt; 
         }
 
@@ -280,10 +284,13 @@
     }
 
     class Commentaire {
-        private ind $id_commentaire;
-        private String $libelle;
-        private String $description;
-        private String $createdAt;
+        private int $id_commentaire;
+        private String $contenu_commentaire;
+        private DateTime $createdAt;
+
+        public function __construct(int $id , String $contenu_commentaire){
+
+        }
 
         public function addComment(): void {
         }
