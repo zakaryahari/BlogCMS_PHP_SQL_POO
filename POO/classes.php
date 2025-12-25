@@ -95,9 +95,26 @@
 
         public function createCategory(string $name, string $desc , Categorie $parentCategory = null): Categorie {
 
+            global $categories;
+            $newId = count($categories) + 1;
+
+            $cat = new Categorie($newId, $name , $desc , $parentCategory);
+
+            $categories[] = $cat;
+
+            return $cat;
         }
 
         public function deleteCategory(int $id_categorie): bool {
+            global $categories;
+
+            foreach($categories as $key => $cat){
+                if ($cat->getId() == $id_categorie) {
+                    unset($cat[$key]);
+                    return true;
+                }
+            }
+            
             return false;
         }
 
