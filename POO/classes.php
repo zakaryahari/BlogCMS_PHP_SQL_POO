@@ -164,8 +164,10 @@
         private String $bio ;
         private array $articles = [];
 
-        public function __construct(int $id, string $username, string $email, string $password, string $bio) {
-            parent::__construct($id, $username, $email, $password);
+        public function __construct(string $username, string $email, string $password, string $bio) {
+            global $users;
+            $newId = count($users) + 1;
+            parent::__construct($newId, $username, $email, $password);
             $this->bio = $bio;
         }
 
@@ -186,19 +188,52 @@
         }
 
         public function createArticle(string $titre, string $content): Article {
-            return new Article();
+            global $articles;
+            $art = new Article($titre , $content);
+
+            $articles[] = $art;
+            $this->addArticle($art);
+
+            return $art;
         }
 
         public function updateOwnArticle(int $id_article, array $data): bool {
+
+            foreach($this->articles as $art){
+                if ($art->getId() == $id_article) {
+                    $art->setTitle($data['title']);
+                    $art->setContent($data['content']);
+                    $art->setExcerpt($data['content']);
+                    $art->setupdatedAt(new DateTime());
+                    return true;
+                }
+            }
             return false;
         }
 
         public function deleteOwnArticle(int $id_article): bool {
-            return false;
+            global $articles;
+
+            $choix = false;
+
+            foreach($this->articles as $key => $art){
+                if ($art->getId() == $id_article) {
+                    unset($this->articles[$key]);
+                    $choix = true;
+                }
+            }
+
+            foreach($articles as $key => $art){
+                if ($art->getId() == $id_article) {
+                    unset($articles[$key]);
+                    $choix = true;
+                }
+            }
+            return $choix;
         }
 
         public function getMyArticles(): array {
-            return [];
+            return $this->articles;
         }
 
         public function removeLocalArticle(int $id_article) : bool{
@@ -216,8 +251,10 @@
     class Admin extends Moderateur {
         private String $isSuperAdmin ;
 
-        public function __construct(int $id, string $username, string $email, string $password, string $isSuperAdmin) {
-            parent::__construct($id, $username, $email, $password);
+        public function __construct(string $username, string $email, string $password, string $isSuperAdmin) {
+            global $users;
+            $newId = count($users) + 1;
+            parent::__construct($newId, $username, $email, $password);
             $this->isSuperAdmin = $isSuperAdmin;
         }        
 
@@ -249,8 +286,10 @@
     class Editeur extends Moderateur {
         private String $moderationLevel ;
 
-        public function __construct(int $id, string $username, string $email, string $password, string $moderationLevel) {
-            parent::__construct($id, $username, $email, $password);
+        public function __construct(string $username, string $email, string $password, string $moderationLevel) {
+            global $users;
+            $newId = count($users) + 1;
+            parent::__construct($newId, $username, $email, $password);
             $this->moderationLevel = $moderationLevel;
         }
         
@@ -273,8 +312,10 @@
         private ?DateTime $publishedAt ;
         private ?DateTime $updatedAt ;
 
-        public function __construct(int $id, string $titre, string $content, string $excerpt) {
-            $this->id_article = $id;
+        public function __construct(string $titre, string $content) {
+            global $articles;
+            $newId = count($articles) + 1;
+            $this->id_article = $newId;
             $this->titre = $titre;
             $this->content = $content;
             $this->excerpt = substr($content, 0, 150) . "...";
@@ -316,15 +357,24 @@
         public function setContent(string $content): void {
             $this->content = $content; 
         }
+
+        public function setExcerpt(string $content): void {
+            $this->excerpt = substr($content, 0, 150) . "..."; 
+        }
         
         public function setStatus(string $status): void {
             $this->status = $status; 
         }
 
-        public function setPublishedAt(string $date): void { 
+
+        public function setPublishedAt(DateTime $date): void { 
             $this->publishedAt = $date; 
         }
 
+
+        public function setupdatedAt(DateTime $date): void { 
+            $this->publishedAt = $date; 
+        }
 
 
         public function addCategory(Categorie $category): void {
@@ -382,9 +432,7 @@
         public function setDescription(string $description): void {
             $this->description = $description;
         }
-        public function getParent(): ?Categorie {
-            return $this->parent;
-        }
+
 
         public function getTree(): array {
             return [];
