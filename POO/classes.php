@@ -103,6 +103,7 @@
             $categories[] = $cat;
 
             return $cat;
+
         }
 
         public function deleteCategory(int $id_categorie): bool {
@@ -119,11 +120,43 @@
         }
 
         public function publishArticle(int $id_article): void {
+            global $articles;
 
+            foreach($articles as $art){
+                if ($art->getId() == $id_article) {
+                    $art->setStatus("published");
+                    $art->setPublishedAt(new DateTime());
+
+                    echo "Article $id_article publié avec succès !\n";
+                    return;
+                }
+            }
+
+            echo "Article introuvable.\n";
         }
 
         public function deleteAnyArticle(int $id_article): bool {
-            return false;
+            global $articles;
+            global $users;
+
+            $choix = false;
+
+            foreach($articles as $key => $art){
+                if ($art->getId() == $id_article) {
+                    unset($articles[$key]);
+                    $choix = true;
+                }
+            }
+
+            foreach($users as $key => $u){
+                if ($u instanceof Author) {
+                    // $u->removeLocalArticle($id_article);
+                    if ($u->removeLocalArticle($id_article)) {
+                        $choix = true;
+                    }
+                }
+            }
+            return $choix;
         }
     }
 
@@ -144,6 +177,14 @@
             $this->bio = $bio; 
         }
 
+        public function getArticles(): array {
+            return $this->articles;
+        }
+
+        public function addArticle(Article $article): void {
+            $this->articles[] = $article; 
+        }
+
         public function createArticle(string $titre, string $content): Article {
             return new Article();
         }
@@ -158,6 +199,17 @@
 
         public function getMyArticles(): array {
             return [];
+        }
+
+        public function removeLocalArticle(int $id_article) : bool{
+            foreach($this->articles as $key => $art){
+                if ($art->getId() == $id_article) {
+                    unset($this->articles[$key]);
+                    // array_values($this->articles);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
