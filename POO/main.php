@@ -185,15 +185,23 @@ while (true) {
             break;
 
         case '5':
-            
             if ($currentUser instanceof Author) {
                 foreach ($currentUser->getMyArticles() as $art) {
                     echo "ID: " . $art->getId() . " | " . $art->getTitle() . "\n";
                 }
             }
-
             break;
 
+        case '6':
+            if ($currentUser instanceof Author) {
+                $title = readline("Title: ");
+                $content = readline("Content: ");
+                $currentUser->createArticle($title, $content);
+                echo "Article Created!\n";
+            }
+            break;
+
+        
 
         default:
             echo "Invalid option.\n";
