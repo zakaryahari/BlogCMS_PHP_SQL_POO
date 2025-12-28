@@ -108,10 +108,10 @@ while (true) {
         echo "9. [Admin] Create User\n";
         echo "10. [Admin] List All Users\n";
         echo "11. [Admin] Delete User\n";
-        echo "12. [Admin] Delete ANY Article (Moderation)\n";
     }
-
+    
     if ($currentUser instanceof Moderateur) {
+        echo "12. [Mod] Delete ANY Article\n";
         echo "13. [Mod] Create Category\n";
         echo "14. [Mod] Publish Article\n";
         echo "15. [Mod] Approve Comment\n";
@@ -215,6 +215,15 @@ while (true) {
                 $id = (int)readline("Article ID to delete: ");
                 if ($currentUser->deleteOwnArticle($id)) echo "Deleted.\n";
                 else echo "Failed.\n";
+            }
+            break;
+
+        case '9':
+            if ($currentUser instanceof Admin) {
+                echo "Creating new Author...\n";
+                $newUser = new Author(readline("User: "), readline("Email: "), readline("Pass: "), "Bio");
+                $currentUser->createUser($newUser);
+                echo "User Added.\n";
             }
             break;
 
