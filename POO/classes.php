@@ -95,10 +95,26 @@
     class Moderateur extends User {
 
         public function approveComment(int $id_commentaire): bool {
+            global $comments;
+            
+            foreach ($comments as $com) {
+                if ($com->getId() == $id_commentaire) {
+                    $com->setStatus("approved");
+                    return true;
+                }
+            }
             return false;
         }
 
         public function deleteComment(int $id_commentaire): bool {
+            global $comments;
+            
+            foreach ($comments as $key => $com) {
+                if ($com->getId() == $id_commentaire) {
+                    unset($comments[$key]);
+                    return true;
+                }
+            }
             return false;
         }
 
@@ -476,7 +492,7 @@
             return $this->createdAt;
         }
 
-        
+
 
         public function setContent(string $content): void {
             $this->contenu_commentaire = $content;
@@ -487,6 +503,9 @@
         }
 
         public function addComment(): void {
+            global $comments;
+
+            $comments[] = $this;
         }
     }
 
