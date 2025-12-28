@@ -1,9 +1,5 @@
 <?php
 
-    require_once 'data.php';
-
-    $currentUser = null;
-
     class User {
         protected int $id_utilisateur ;
         protected String $username ;
@@ -63,6 +59,19 @@
              $this->lastLogin = $date; 
         }
 
+        public function getAllarticles() : array {
+            global $users;
+
+            $articlesArray = [];
+
+            foreach($users as $key => $u){
+                if ($u instanceof Author) {
+                    $art = $u->getArticles();
+                    $articlesArray = array_merge($articlesArray, $art);
+                }
+            }
+            return $articlesArray;
+        }
 
         public function login(string $email, string $password): ?User {
 
@@ -147,15 +156,6 @@
                     $choix = true;
                 }
             }
-
-            foreach($users as $key => $u){
-                if ($u instanceof Author) {
-                    // $u->removeLocalArticle($id_article);
-                    if ($u->removeLocalArticle($id_article)) {
-                        $choix = true;
-                    }
-                }
-            }
             return $choix;
         }
     }
@@ -188,12 +188,9 @@
         }
 
         public function createArticle(string $titre, string $content): Article {
-            global $articles;
             $art = new Article($titre , $content);
-
             $articles[] = $art;
             $this->addArticle($art);
-
             return $art;
         }
 
@@ -219,13 +216,6 @@
             foreach($this->articles as $key => $art){
                 if ($art->getId() == $id_article) {
                     unset($this->articles[$key]);
-                    $choix = true;
-                }
-            }
-
-            foreach($articles as $key => $art){
-                if ($art->getId() == $id_article) {
-                    unset($articles[$key]);
                     $choix = true;
                 }
             }
@@ -266,25 +256,11 @@
             $this->isSuperAdmin = $val; 
         }
 
-        public function createUser(string $username, string $email, string $password): Utilisateur {
-            return new Utilisateur();
-        }
-
-        public function deleteUser(int $id_utilisateur): bool {
-            return false;
-        }
-
-        public function updateUserRole(int $id_utilisateur, string $role): bool {
-            return false;
-        }
-
-        public function listAllUsers(): array {
-            return [];
-        }        
+        
     }
 
     class Editeur extends Moderateur {
-        private String $moderationLevel ;
+        private String $moderationLevel = 'junior';
 
         public function __construct(string $username, string $email, string $password, string $moderationLevel) {
             global $users;
@@ -366,21 +342,12 @@
             $this->status = $status; 
         }
 
-
         public function setPublishedAt(DateTime $date): void { 
             $this->publishedAt = $date; 
         }
 
-
         public function setupdatedAt(DateTime $date): void { 
-            $this->publishedAt = $date; 
-        }
-
-
-        public function addCategory(Categorie $category): void {
-        }
-
-        public function removeCategory(Categorie $category): void {
+            $this->updatedAt = $date; 
         }
 
         public function getComments(): array {
@@ -403,7 +370,6 @@
             $this->createdAt = new DateTime();
         }
 
-
         public function getId(): int {
             return $this->id_categorie;
         }
@@ -424,7 +390,6 @@
             return $this->createdAt;
         }
 
-
         public function setName(string $name): void {
             $this->name = $name;
         }
@@ -432,7 +397,6 @@
         public function setDescription(string $description): void {
             $this->description = $description;
         }
-
 
         public function getTree(): array {
             return [];
