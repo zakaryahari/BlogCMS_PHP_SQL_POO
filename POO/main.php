@@ -201,7 +201,15 @@ while (true) {
             }
             break;
 
-        
+        case '7':
+            if ($currentUser instanceof Author) {
+                $id = (int)readline("Article ID to update: ");
+                $data = ['title' => readline("New Title: "), 'content' => readline("New Content: ")];
+                if ($currentUser->updateOwnArticle($id, $data)) echo "Updated.\n";
+                else echo "Not found.\n";
+            }
+            break;
+
 
         default:
             echo "Invalid option.\n";
