@@ -68,5 +68,23 @@ echo "========================================\n";
 
 $currentUser = null;
 
+while ($currentUser === null) {
+    echo "\nPlease Log In:\n";
+    
+    $email = readline("Email: ");
+    $password = readline("Password: ");
+
+    foreach ($Collection->storage['users'] as $u) {
+        if ($u->getEmail() === $email && $u->getPassword() === $password) {
+            $currentUser = $u;
+            echo "\nLogin Successful! Welcome, " . $u->getUsername() . ".\n";
+            break;
+        }
+    }
+
+    if ($currentUser === null) {
+        echo "Wrong email or password. Try again.\n";
+    }
+}
 
 ?>
