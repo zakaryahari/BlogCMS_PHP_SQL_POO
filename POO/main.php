@@ -251,6 +251,12 @@ while (true) {
             }
             break;
 
+        case '13':
+            if ($currentUser instanceof Moderateur) {
+                $currentUser->createCategory(readline("Name: "), "Description");
+                echo "Category Created.\n";
+            }
+            break;
 
         default:
             echo "Invalid option.\n";
