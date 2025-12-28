@@ -210,6 +210,14 @@ while (true) {
             }
             break;
 
+        case '8':
+            if ($currentUser instanceof Author) {
+                $id = (int)readline("Article ID to delete: ");
+                if ($currentUser->deleteOwnArticle($id)) echo "Deleted.\n";
+                else echo "Failed.\n";
+            }
+            break;
+
 
         default:
             echo "Invalid option.\n";
