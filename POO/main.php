@@ -243,6 +243,14 @@ while (true) {
             }
             break;
 
+        case '12':
+            if ($currentUser instanceof Admin) {
+                $id = (int)readline("Article ID to delete: ");
+                if ($currentUser->deleteAnyArticle($id)) echo "Article Deleted from Everywhere.\n";
+                else echo "Not found.\n";
+            }
+            break;
+
 
         default:
             echo "Invalid option.\n";
