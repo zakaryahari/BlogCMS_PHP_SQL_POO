@@ -87,4 +87,40 @@ while ($currentUser === null) {
     }
 }
 
+while (true) {
+    echo "\n----------------------------------------\n";
+    echo "              MAIN MENU\n";
+    echo "----------------------------------------\n";
+
+    echo "1. Logout / Exit\n";
+    echo "2. View All Articles (Homepage)\n";
+    echo "3. View Comments on an Article\n";
+    echo "4. Add Comment to an Article\n";
+
+    if ($currentUser instanceof Author) {
+        echo "5. [Author] My Articles\n";
+        echo "6. [Author] Create Article\n";
+        echo "7. [Author] Update My Article\n";
+        echo "8. [Author] Delete My Article\n";
+    }
+
+    if ($currentUser instanceof Admin) {
+        echo "9. [Admin] Create User\n";
+        echo "10. [Admin] List All Users\n";
+        echo "11. [Admin] Delete User\n";
+        echo "12. [Admin] Delete ANY Article (Moderation)\n";
+    }
+
+    if ($currentUser instanceof Moderateur) {
+        echo "13. [Mod] Create Category\n";
+        echo "14. [Mod] Publish Article\n";
+        echo "15. [Mod] Approve Comment\n";
+        echo "16. [Mod] Delete Comment\n";
+    }
+
+    echo "----------------------------------------\n";
+    $choice = readline("Choose an option number: ");
+    echo "\n";
+
+}
 ?>
