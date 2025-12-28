@@ -97,8 +97,8 @@
         public function approveComment(int $id_commentaire): bool {
             global $Collection;
 
-                foreach ($Collection->storage['articles'] as $art) {
-
+            foreach ($Collection->storage['articles'] as $art) {
+                    
                     foreach ($art->getComments() as $com) {
                         if ($com->getId() == $id_commentaire) {
                             $com->setStatus("approved");
@@ -112,9 +112,9 @@
 
         public function deleteComment(int $id_commentaire): bool {
             global $Collection;
-            foreach ($Collection->storage['comments'] as $key => $com) {
-                if ($com->getId() == $id_commentaire) {
-                    unset($Collection->storage['comments'][$key]);
+            foreach ($Collection->storage['articles'] as $art) {
+                  
+                if ($art->deleteComment($id_commentaire)) {
                     return true;
                 }
             }
@@ -513,12 +513,6 @@
 
         public function setStatus(string $status): void {
             $this->status = $status;
-        }
-
-        public function addComment(): void {
-            global $comments;
-
-            $comments[] = $this;
         }
     }
 
