@@ -95,9 +95,9 @@ while (true) {
     echo "1. Logout / Exit\n";
     echo "2. View All Articles (Homepage)\n";
     echo "3. View Comments on an Article\n";
-    echo "4. Add Comment to an Article\n";
-
+    
     if ($currentUser instanceof Author) {
+        echo "4. Add Comment to an Article\n";
         echo "5. [Author] My Articles\n";
         echo "6. [Author] Create Article\n";
         echo "7. [Author] Update My Article\n";
@@ -161,24 +161,34 @@ while (true) {
             break;
 
         case '4':
-            echo "--- ADD COMMENT ---\n";
-            $artId = (int)readline("Enter Article ID: ");
-            
-            $foundArt = null;
-            foreach($Collection->storage['articles'] as $art) {
-                if ($art->getId() == $artId) $foundArt = $art;
-            }
+            if ($currentUser instanceof Author) {
+                echo "--- ADD COMMENT ---\n";
+                $artId = (int)readline("Enter Article ID: ");
+                
+                $foundArt = null;
+                foreach($Collection->storage['articles'] as $art) {
+                    if ($art->getId() == $artId) $foundArt = $art;
+                }
 
-            if ($foundArt) {
-                $content = readline("Your Comment: ");
-                $newComId = rand(100, 999);
-                
-                $newComment = new Commentaire($newComId, $content, $currentUser->getUsername());
-                
-                $foundArt->addComment($newComment);
-                echo "Comment added! (Pending Review)\n";
-            } else {
-                echo "Article not found.\n";
+                if ($foundArt) {
+                    $content = readline("Your Comment: ");
+                    $newComId = rand(100, 999);
+                    
+                    $newComment = new Commentaire($newComId, $content, $currentUser->getUsername());
+                    
+                    $foundArt->addComment($newComment);
+                    echo "Comment added! (Pending Review)\n";
+                } else {
+                    echo "Article not found.\n";
+                }
+            }
+            break;
+
+        case '5':
+            if ($currentUser instanceof Author) {
+                foreach ($currentUser->getMyArticles() as $art) {
+                    echo "ID: " . $art->getId() . " | " . $art->getTitle() . "\n";
+                }
             }
             break;
 
