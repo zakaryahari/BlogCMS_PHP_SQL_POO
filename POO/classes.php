@@ -1,15 +1,17 @@
 <?php
     require_once 'data.php';
 
+    $Collection = new Collection();
+
     class User {
         protected int $id_utilisateur ;
-        protected String $username ;
-        protected String $email ;
-        protected String $password ;
+        protected string $username ;
+        protected string $email ;
+        protected string $password ;
         protected DateTime $createdAt ;
         protected ?DateTime $lastLogin ;
 
-        public function __construct(int $id , String $username , String $email , String $password){
+        public function __construct(int $id , string $username , string $email , string $password){
             $this->id_utilisateur = $id;
             $this->username = $username;
             $this->email = $email;
@@ -61,11 +63,10 @@
         }
 
         public function getAllarticles() : array {
-            global $users;
-
+            global $Collection;
             $articlesArray = [];
 
-            foreach($users as $key => $u){
+            foreach($Collection->storage['users'] as $key => $u){
                 if ($u instanceof Author) {
                     $art = $u->getArticles();
                     $articlesArray = array_merge($articlesArray, $art);
@@ -75,10 +76,8 @@
         }
 
         public function login(string $email, string $password): ?User {
-
-            global $users;
-
-            foreach($users as $u){
+            global $Collection;
+            foreach($Collection->storage['users'] as $u){
                 if ($u->getEmail() == $email && $password == $u->getPassword()) {
                     $u->setLastLogin(new DateTime());
 
@@ -96,23 +95,26 @@
     class Moderateur extends User {
 
         public function approveComment(int $id_commentaire): bool {
-            global $comments;
-            
-            foreach ($comments as $com) {
-                if ($com->getId() == $id_commentaire) {
-                    $com->setStatus("approved");
-                    return true;
+            global $Collection;
+
+                foreach ($Collection->storage['articles'] as $art) {
+
+                    foreach ($art->getComments() as $com) {
+                        if ($com->getId() == $id_commentaire) {
+                            $com->setStatus("approved");
+                            return true;
+                        }
+                    }
                 }
-            }
-            return false;
+
+                return false;
         }
 
         public function deleteComment(int $id_commentaire): bool {
-            global $comments;
-            
-            foreach ($comments as $key => $com) {
+            global $Collection;
+            foreach ($Collection->storage['comments'] as $key => $com) {
                 if ($com->getId() == $id_commentaire) {
-                    unset($comments[$key]);
+                    unset($Collection->storage['comments'][$key]);
                     return true;
                 }
             }
@@ -120,24 +122,22 @@
         }
 
         public function createCategory(string $name, string $desc , Categorie $parentCategory = null): Categorie {
-
-            global $categories;
-            $newId = count($categories) + 1;
+            global $Collection;
+            $newId = count($Collection->storage['categories']) + 1;
 
             $cat = new Categorie($newId, $name , $desc , $parentCategory);
 
-            $categories[] = $cat;
+            $Collection->storage['categories'][] = $cat;
 
             return $cat;
 
         }
 
         public function deleteCategory(int $id_categorie): bool {
-            global $categories;
-
-            foreach($categories as $key => $cat){
+            global $Collection;
+            foreach($Collection->storage['categories'] as $key => $cat){
                 if ($cat->getId() == $id_categorie) {
-                    unset($cat[$key]);
+                    unset($Collection->storage['categories'][$key]);
                     return true;
                 }
             }
@@ -146,9 +146,8 @@
         }
 
         public function publishArticle(int $id_article): void {
-            global $articles;
-
-            foreach($articles as $art){
+            global $Collection;
+            foreach($Collection->storage['articles'] as $art){
                 if ($art->getId() == $id_article) {
                     $art->setStatus("published");
                     $art->setPublishedAt(new DateTime());
@@ -162,15 +161,21 @@
         }
 
         public function deleteAnyArticle(int $id_article): bool {
-            global $articles;
-            global $users;
-
+            global $Collection;
             $choix = false;
 
-            foreach($articles as $key => $art){
+            foreach($Collection->storage['articles'] as $key => $art){
                 if ($art->getId() == $id_article) {
-                    unset($articles[$key]);
+                    unset($Collection->storage['articles'][$key]);
                     $choix = true;
+                }
+            }
+
+            foreach($Collection->storage['users'] as $u) {
+                if ($u instanceof Author) {
+                    if ($u->removeLocalArticle($id_article)) {
+                        break;
+                    }
                 }
             }
             return $choix;
@@ -178,12 +183,12 @@
     }
 
     class Author extends User {
-        private String $bio ;
+        private string $bio ;
         private array $articles = [];
 
         public function __construct(string $username, string $email, string $password, string $bio) {
-            global $users;
-            $newId = count($users) + 1;
+            global $Collection;
+            $newId = count($Collection->storage['users']) + 1;
             parent::__construct($newId, $username, $email, $password);
             $this->bio = $bio;
         }
@@ -205,8 +210,9 @@
         }
 
         public function createArticle(string $titre, string $content): Article {
+            global $Collection;
             $art = new Article($titre , $content);
-            $articles[] = $art;
+            $Collection->storage['articles'][] = $art;
             $this->addArticle($art);
             return $art;
         }
@@ -226,7 +232,6 @@
         }
 
         public function deleteOwnArticle(int $id_article): bool {
-            global $articles;
 
             $choix = false;
 
@@ -247,7 +252,6 @@
             foreach($this->articles as $key => $art){
                 if ($art->getId() == $id_article) {
                     unset($this->articles[$key]);
-                    // array_values($this->articles);
                     return true;
                 }
             }
@@ -256,11 +260,11 @@
     }
 
     class Admin extends Moderateur {
-        private String $isSuperAdmin ;
+        private string $isSuperAdmin ;
 
         public function __construct(string $username, string $email, string $password, string $isSuperAdmin) {
-            global $users;
-            $newId = count($users) + 1;
+            global $Collection;
+            $newId = count($Collection->storage['users']) + 1;
             parent::__construct($newId, $username, $email, $password);
             $this->isSuperAdmin = $isSuperAdmin;
         }        
@@ -274,44 +278,43 @@
         }
 
         public function createUser(User $utilisateur): User {
-            global $users; 
+            global $Collection; 
             
-            $users[] = $utilisateur;
+            $Collection->storage['users'][] = $utilisateur;
 
             return $utilisateur;
         }
 
         public function deleteUser(int $id_utilisateur): bool {
-            global $users;
-            global $articles;
+            global $Collection;
 
             $choix = false;
 
-            foreach($users as $key => $u){
+            foreach($Collection->storage['users'] as $key => $u){
                 if ($u->getid_utilisateur() == $id_utilisateur) {
-                    unset($users[$key]);
+                    unset($Collection->storage['users'][$key]);
                     $choix = true;
                 }
             }
-
+            
             return $choix;
 
         }
 
         public function listAllUsers(): array {
-            global $users;
-            return $users;
+            global $Collection;
+            return $Collection->storage['users'];
         }       
         
         
     }
 
     class Editeur extends Moderateur {
-        private String $moderationLevel = 'junior';
+        private string $moderationLevel = 'junior';
 
         public function __construct(string $username, string $email, string $password, string $moderationLevel) {
-            global $users;
-            $newId = count($users) + 1;
+            global $Collection;
+            $newId = count($Collection->storage['users']) + 1;
             parent::__construct($newId, $username, $email, $password);
             $this->moderationLevel = $moderationLevel;
         }
@@ -327,17 +330,19 @@
 
     class Article {
         private int $id_article ;
-        private String $titre ; 
-        private String $content ; 
-        private String $excerpt ; 
-        private String $status ;
+        private string $titre ; 
+        private string $content ; 
+        private string $excerpt ; 
+        private string $status ;
         private DateTime $createdAt ;
         private ?DateTime $publishedAt ;
         private ?DateTime $updatedAt ;
+        private array $comments = [];
+
 
         public function __construct(string $titre, string $content) {
-            global $articles;
-            $newId = count($articles) + 1;
+            global $Collection;
+            $newId = count($Collection->storage['articles']) + 1;
             $this->id_article = $newId;
             $this->titre = $titre;
             $this->content = $content;
@@ -371,7 +376,13 @@
             return $this->createdAt; 
         }
 
+        public function getComments(): array {
+            return $this->comments;
+        }
 
+        public function addComment(Commentaire $comment): void {
+            $this->comments[] = $comment;
+        }
 
         public function setTitle(string $titre): void {
             $this->titre = $titre; 
@@ -397,15 +408,22 @@
             $this->updatedAt = $date; 
         }
 
-        public function getComments(): array {
-            return [];
+        public function deleteComment(int $commentId): bool {
+            foreach ($this->comments as $key => $com) {
+                if ($com->getId() == $commentId) {
+                    unset($this->comments[$key]);
+                    return true;
+                }
+            }
+            return false;
         }
+
     }
 
     class Categorie {
         private int $id_categorie ;
-        private String $name ;
-        private String $description ;
+        private string $name ;
+        private string $description ;
         private ?Categorie $parent ;
         private DateTime $createdAt ;
 
@@ -454,17 +472,15 @@
 
     class Commentaire {
         private int $id_commentaire;
-        private string $contenu_commentaire; 
-        private int $authorId;               
-        private int $articleId;              
-        private string $status;             
+        private string $contenu_commentaire;               
+        private string $status;
+        private string $authorName;             
         private DateTime $createdAt;
 
-        public function __construct(int $id, string $content, int $authorId, int $articleId) {
+        public function __construct(int $id, string $content ,string $authorName) {
             $this->id_commentaire = $id;
             $this->contenu_commentaire = $content;
-            $this->authorId = $authorId;
-            $this->articleId = $articleId;
+            $this->authorName = $authorName;
             $this->status = "pending";
             $this->createdAt = new DateTime();
         }
@@ -477,20 +493,16 @@
             return $this->contenu_commentaire;
         }
 
-        public function getAuthorId(): int {
-            return $this->authorId;
-        }
-
-        public function getArticleId(): int {
-            return $this->articleId;
-        }
-
         public function getStatus(): string {
             return $this->status;
         }
 
         public function getCreatedAt(): DateTime {
             return $this->createdAt;
+        }
+
+        public function getAuthorName(): string {
+            return $this->authorName;
         }
 
 
