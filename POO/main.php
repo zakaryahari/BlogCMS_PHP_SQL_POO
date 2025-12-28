@@ -273,6 +273,13 @@ while (true) {
             }
             break;
 
+        case '16':
+            if ($currentUser instanceof Moderateur) {
+                $id = (int)readline("Comment ID to Delete: ");
+                if ($currentUser->deleteComment($id)) echo "Comment Deleted.\n";
+                else echo "Comment not found.\n";
+            }
+            break;
 
         default:
             echo "Invalid option.\n";
