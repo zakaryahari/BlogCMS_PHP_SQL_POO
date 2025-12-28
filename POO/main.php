@@ -265,6 +265,14 @@ while (true) {
             }
             break;
 
+        case '15':
+            if ($currentUser instanceof Moderateur) {
+                $id = (int)readline("Comment ID to Approve: ");
+                if ($currentUser->approveComment($id)) echo "Comment Approved.\n";
+                else echo "Comment not found.\n";
+            }
+            break;
+
 
         default:
             echo "Invalid option.\n";
