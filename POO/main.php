@@ -234,7 +234,15 @@ while (true) {
                 }
             }
             break;
-       
+            
+        case '11':
+            if ($currentUser instanceof Admin) {
+                $id = (int)readline("User ID to delete: ");
+                if ($currentUser->deleteUser($id)) echo "User Deleted.\n";
+                else echo "Not found.\n";
+            }
+            break;
+
 
         default:
             echo "Invalid option.\n";
