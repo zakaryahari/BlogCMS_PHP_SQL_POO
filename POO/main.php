@@ -1,0 +1,72 @@
+<?php
+
+require_once 'classes.php';
+
+$Collection = new Collection();
+
+$admin = new Admin("SuperAdmin", "admin@test.com", "1234", "YES");
+$auth1 = new Author("Victor Hugo", "hugo@test.com", "1234", "French Romantic writer.");
+$auth2 = new Author("Jane Austen", "jane@test.com", "1234", "English novelist.");
+$auth3 = new Author("George Orwell", "george@test.com", "1234", "Dystopian visionary.");
+$support = new Admin("TechSupport", "support@test.com", "1234", "NO");
+
+$Collection->storage['users'][] = $admin;
+$Collection->storage['users'][] = $auth1;
+$Collection->storage['users'][] = $auth2;
+$Collection->storage['users'][] = $auth3;
+$Collection->storage['users'][] = $support;
+
+$art1 = $auth1->createArticle("Les Miserables", "A story of justice, redemption, and revolution in France.");
+$art1->setStatus("published");
+$art2 = $auth1->createArticle("The Hunchback of Notre-Dame", "Quasimodo, the bell-ringer of Notre-Dame.");
+
+$art3 = $auth2->createArticle("Pride and Prejudice", "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.");
+$art3->setStatus("published");
+$art4 = $auth2->createArticle("Emma", "Handsome, clever, and rich, with a comfortable home and happy disposition.");
+$art4->setStatus("published");
+$art5 = $auth2->createArticle("Sense and Sensibility", "The Dashwood sisters and their love lives.");
+
+$art6 = $auth3->createArticle("1984", "Big Brother is watching you. War is Peace. Freedom is Slavery.");
+$art6->setStatus("published");
+$art7 = $auth3->createArticle("Animal Farm", "All animals are equal, but some animals are more equal than others.");
+
+$c1 = new Commentaire(1, "An absolute masterpiece of literature.", "BookWorm99");
+$c1->setStatus("approved");
+$art1->addComment($c1);
+
+$c2 = new Commentaire(2, "The book is way too long for me.", "LazyReader");
+$art1->addComment($c2);
+
+$c3 = new Commentaire(3, "Mr. Darcy is the ultimate dream.", "RomanceFan");
+$c3->setStatus("approved");
+$art3->addComment($c3);
+
+$c4 = new Commentaire(4, "I prefer the movie version.", "MovieBuff");
+$art3->addComment($c4);
+
+$c5 = new Commentaire(5, "Emma is such a complex character.", "Janeite");
+$c5->setStatus("approved");
+$art4->addComment($c5);
+
+$c6 = new Commentaire(6, "This book predicted the future.", "TinfoilHat");
+$c6->setStatus("approved");
+$art6->addComment($c6);
+
+$c7 = new Commentaire(7, "Too scary to read at night.", "ScaredyCat");
+$art6->addComment($c7);
+
+$c8 = new Commentaire(8, "Four legs good, two legs bad!", "Snowball");
+$c8->setStatus("approved");
+$art7->addComment($c8);
+
+$c9 = new Commentaire(9, "Poor Quasimodo.", "Empath");
+$art2->addComment($c9);
+
+echo "========================================\n";
+echo "      WELCOME TO THE BLOG SYSTEM\n";
+echo "========================================\n";
+
+$currentUser = null;
+
+
+?>
