@@ -122,5 +122,24 @@ while (true) {
     $choice = readline("Choose an option number: ");
     echo "\n";
 
+    switch ($choice) {
+        case '1':
+            echo "Goodbye!\n";
+            exit; 
+
+        case '2':
+            echo "--- WEBSITE HOMEPAGE ---\n";
+            $allArticles = $currentUser->getAllarticles(); 
+            if (empty($allArticles)) { echo "No articles found.\n"; }
+            foreach ($allArticles as $art) {
+                echo "ID: " . $art->getId() . " | " . $art->getTitle() . " | Status: " . $art->getStatus() . " | Comments: " . count($art->getComments()) ."\n";
+            }
+            break;
+
+
+    }
+    
+    echo "\n(Press Enter to continue...)";
+    fgets(STDIN); 
 }
 ?>
