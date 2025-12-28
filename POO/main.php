@@ -141,7 +141,7 @@ while (true) {
             $artId = (int)readline("Enter Article ID: ");
             
             $foundArt = null;
-
+            
             foreach($Collection->storage['articles'] as $art) {
                 if ($art->getId() == $artId) {
                     $foundArt = $art;
@@ -155,6 +155,28 @@ while (true) {
                 foreach($commentsList as $c) {
                     echo "[" . $c->getStatus() . "] " . $c->getAuthorName() . ": " . $c->getContent() . " (ID: " . $c->getId() . ")\n";
                 }
+            } else {
+                echo "Article not found.\n";
+            }
+            break;
+
+        case '4':
+            echo "--- ADD COMMENT ---\n";
+            $artId = (int)readline("Enter Article ID: ");
+            
+            $foundArt = null;
+            foreach($Collection->storage['articles'] as $art) {
+                if ($art->getId() == $artId) $foundArt = $art;
+            }
+
+            if ($foundArt) {
+                $content = readline("Your Comment: ");
+                $newComId = rand(100, 999);
+                
+                $newComment = new Commentaire($newComId, $content, $currentUser->getUsername());
+                
+                $foundArt->addComment($newComment);
+                echo "Comment added! (Pending Review)\n";
             } else {
                 echo "Article not found.\n";
             }
