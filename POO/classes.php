@@ -452,6 +452,40 @@
             $this->createdAt = new DateTime();
         }
 
+        public function getId(): int {
+            return $this->id_commentaire;
+        }
+
+        public function getContent(): string {
+            return $this->contenu_commentaire;
+        }
+
+        public function getAuthorId(): int {
+            return $this->authorId;
+        }
+
+        public function getArticleId(): int {
+            return $this->articleId;
+        }
+
+        public function getStatus(): string {
+            return $this->status;
+        }
+
+        public function getCreatedAt(): DateTime {
+            return $this->createdAt;
+        }
+
+        
+
+        public function setContent(string $content): void {
+            $this->contenu_commentaire = $content;
+        }
+
+        public function setStatus(string $status): void {
+            $this->status = $status;
+        }
+
         public function addComment(): void {
         }
     }
