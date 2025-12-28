@@ -1,5 +1,19 @@
 <?php
 
+    class Collection {
+
+        public array $users = [];
+        public array $articles = [];
+        public array $categories = [];
+        public array $comments = [];
+
+        public function __construct() {
+            $this->users[] = new Admin('zakarya', 'zakarya@.com', '1234', 'YES');
+            $this->users[] = new Author('Alice', 'alice@blog.com', '1234', 'I love PHP');
+            $this->users[] = new Author('Bob', 'bob@blog.com', '1234', 'Coding is life');
+        }
+    }
+
     class User {
         protected int $id_utilisateur ;
         protected String $username ;
@@ -78,7 +92,7 @@
             global $users;
 
             foreach($users as $u){
-                if ($u->getEmail() == $email && password_verify($password , $u->getPassword())) {
+                if ($u->getEmail() == $email && $password == $u->getPassword()) {
                     $u->setLastLogin(new DateTime());
 
                     return $u;
