@@ -185,11 +185,13 @@ while (true) {
             break;
 
         case '5':
+            
             if ($currentUser instanceof Author) {
                 foreach ($currentUser->getMyArticles() as $art) {
                     echo "ID: " . $art->getId() . " | " . $art->getTitle() . "\n";
                 }
             }
+
             break;
 
 
