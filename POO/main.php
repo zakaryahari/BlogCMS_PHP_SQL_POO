@@ -111,7 +111,7 @@ while (true) {
     }
     
     if ($currentUser instanceof Moderateur) {
-        echo "12. [Mod] Delete ANY Article\n";
+        echo "12. [Admin] Delete ANY Article\n";
         echo "13. [Mod] Create Category\n";
         echo "14. [Mod] Publish Article\n";
         echo "15. [Mod] Approve Comment\n";
@@ -227,6 +227,14 @@ while (true) {
             }
             break;
 
+        case '10':
+            if ($currentUser instanceof Admin) {
+                foreach ($currentUser->listAllUsers() as $u) {
+                    echo "ID: " . $u->getid_utilisateur() . " | " . $u->getUsername() . " (" . get_class($u) . ")\n";
+                }
+            }
+            break;
+       
 
         default:
             echo "Invalid option.\n";
