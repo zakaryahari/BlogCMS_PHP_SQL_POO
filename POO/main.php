@@ -258,6 +258,14 @@ while (true) {
             }
             break;
 
+        case '14':
+            if ($currentUser instanceof Moderateur) {
+                $id = (int)readline("Article ID to publish: ");
+                $currentUser->publishArticle($id);
+            }
+            break;
+
+
         default:
             echo "Invalid option.\n";
     }
