@@ -437,11 +437,19 @@
 
     class Commentaire {
         private int $id_commentaire;
-        private String $contenu_commentaire;
+        private string $contenu_commentaire; 
+        private int $authorId;               
+        private int $articleId;              
+        private string $status;             
         private DateTime $createdAt;
 
-        public function __construct(int $id , String $contenu_commentaire){
-
+        public function __construct(int $id, string $content, int $authorId, int $articleId) {
+            $this->id_commentaire = $id;
+            $this->contenu_commentaire = $content;
+            $this->authorId = $authorId;
+            $this->articleId = $articleId;
+            $this->status = "pending";
+            $this->createdAt = new DateTime();
         }
 
         public function addComment(): void {
