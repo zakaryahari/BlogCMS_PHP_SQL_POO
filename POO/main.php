@@ -132,7 +132,7 @@ while (true) {
             $allArticles = $currentUser->getAllarticles(); 
             if (empty($allArticles)) { echo "No articles found.\n"; }
             foreach ($allArticles as $art) {
-                echo "ID: " . $art->getId() . " | " . $art->getTitle() . " | Status: " . $art->getStatus() . " | Comments: " . count($art->getComments()) ."\n";
+                echo "ID: " . $art->getId() . " | " . $art->getTitle() . " | Status: " . $art->getStatus() . " | Comments: " . count($art->getComments()) ." \n";
             }
             break;
 
