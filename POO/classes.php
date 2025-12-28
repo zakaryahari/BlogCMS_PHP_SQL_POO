@@ -1,16 +1,21 @@
 <?php
 
     class Collection {
-
-        public array $users = [];
-        public array $articles = [];
-        public array $categories = [];
-        public array $comments = [];
+        
+        public array $storage = [];
 
         public function __construct() {
-            $this->users[] = new Admin('zakarya', 'zakarya@.com', '1234', 'YES');
-            $this->users[] = new Author('Alice', 'alice@blog.com', '1234', 'I love PHP');
-            $this->users[] = new Author('Bob', 'bob@blog.com', '1234', 'Coding is life');
+            
+            $this->storage = [
+                'users' => [
+                    new Admin('SuperAdmin', 'admin@blog.com',"1234", 'YES'),
+                    new Author('Alice', 'alice@blog.com',"1234", 'I love PHP'),
+                    new Author('Bob', 'bob@blog.com',"1234", 'Coding is life')
+                ],
+                'categories' => [],
+                'articles'   => [],
+                'comments'   => []
+            ];
         }
     }
 
