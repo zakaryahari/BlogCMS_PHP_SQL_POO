@@ -132,11 +132,37 @@ while (true) {
             $allArticles = $currentUser->getAllarticles(); 
             if (empty($allArticles)) { echo "No articles found.\n"; }
             foreach ($allArticles as $art) {
-                echo "ID: " . $art->getId() . " | " . $art->getTitle() . " | Status: " . $art->getStatus() . " | Comments: " . count($art->getComments()) ." \n";
+                echo "ID: " . $art->getId() . " | " . $art->getTitle() . " | Status: " . $art->getStatus() . " | Comments: " . count($art->getComments()) ."\n";
+            }
+            break;
+
+        case '3':
+            echo "--- VIEW COMMENTS ---\n";
+            $artId = (int)readline("Enter Article ID: ");
+            
+            $foundArt = null;
+
+            foreach($Collection->storage['articles'] as $art) {
+                if ($art->getId() == $artId) {
+                    $foundArt = $art;
+                }
+            }
+
+            if ($foundArt) {
+                $commentsList = $foundArt->getComments();
+                if (empty($commentsList)) echo "No comments yet.\n";
+                
+                foreach($commentsList as $c) {
+                    echo "[" . $c->getStatus() . "] " . $c->getAuthorName() . ": " . $c->getContent() . " (ID: " . $c->getId() . ")\n";
+                }
+            } else {
+                echo "Article not found.\n";
             }
             break;
 
 
+        default:
+            echo "Invalid option.\n";
     }
     
     echo "\n(Press Enter to continue...)";
