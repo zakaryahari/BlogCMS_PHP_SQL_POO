@@ -256,6 +256,36 @@
             $this->isSuperAdmin = $val; 
         }
 
+        public function createUser(User $utilisateur): User {
+            global $users; 
+            
+            $users[] = $utilisateur;
+
+            return $utilisateur;
+        }
+
+        public function deleteUser(int $id_utilisateur): bool {
+            global $users;
+            global $articles;
+
+            $choix = false;
+
+            foreach($users as $key => $u){
+                if ($u->getid_utilisateur() == $id_utilisateur) {
+                    unset($users[$key]);
+                    $choix = true;
+                }
+            }
+
+            return $choix;
+
+        }
+
+        public function listAllUsers(): array {
+            global $users;
+            return $users;
+        }       
+        
         
     }
 
